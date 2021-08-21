@@ -1,0 +1,10 @@
+[Desktop Entry]
+Version=1.0
+Categories=GNOME;
+Icon=terminal
+Name=Execute
+Comment=GNOME Shell search provider for commands
+Terminal=false
+Type=Application
+OnlyShowIn=GNOME;
+Exec=gnome-terminal
