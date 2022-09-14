@@ -21,9 +21,6 @@ class SearchService(dbus.service.Object):
         bus_name = dbus.service.BusName(self.bus_name, bus=self.session_bus)
         dbus.service.Object.__init__(self, bus_name, self.object_path)
 
-        stdout = subprocess.check_output(['dmenu_path'])
-        self.commands = [line.decode("utf-8") for line in stdout.splitlines()]
-
     @dbus.service.method(in_signature='sasu', **sbn)
     def ActivateResult(self, id, terms, timestamp):
         command = id
@@ -32,6 +29,9 @@ class SearchService(dbus.service.Object):
 
     @dbus.service.method(in_signature='as', out_signature='as', **sbn)
     def GetInitialResultSet(self, terms):
+        stdout = subprocess.check_output(['dmenu_path'])
+        self.commands = [line.decode("utf-8") for line in stdout.splitlines()]
+
         search = " ".join(terms)
         results = [command for command in self.commands if search in command]
         results.append(search)
