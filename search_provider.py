@@ -29,13 +29,8 @@ class SearchService(dbus.service.Object):
 
     @dbus.service.method(in_signature='as', out_signature='as', **sbn)
     def GetInitialResultSet(self, terms):
-        stdout = subprocess.check_output(['dmenu_path'])
-        self.commands = [line.decode("utf-8") for line in stdout.splitlines()]
-
-        search = " ".join(terms)
-        results = [command for command in self.commands if search in command]
-        results.append(search)
-        return results
+        commands=[line.decode("utf-8") for line in subprocess.check_output(['dmenu_path']).splitlines()]
+        return self.GetSubsearchResultSet(commands,terms)
 
     @dbus.service.method(in_signature='as', out_signature='aa{sv}', **sbn)
     def GetResultMetas(self, ids):
@@ -45,7 +40,7 @@ class SearchService(dbus.service.Object):
     def GetSubsearchResultSet(self, previous_results, new_terms):
         search = " ".join(new_terms)
         print(search)
-        results = [command for command in self.commands if search in command]
+        results = [command for command in previous_results if search in command]
         results = [search] + results
         print(results)
         return results
