@@ -21,7 +21,7 @@ class SearchService(dbus.service.Object):
         bus_name = dbus.service.BusName(self.bus_name, bus=self.session_bus)
         dbus.service.Object.__init__(self, bus_name, self.object_path)
 
-        stdout = subprocess.check_output(['/bin/bash', '-c', 'compgen -c'])
+        stdout = subprocess.check_output(['dmenu_path'])
         self.commands = [line.decode("utf-8") for line in stdout.splitlines()]
 
     @dbus.service.method(in_signature='sasu', **sbn)
