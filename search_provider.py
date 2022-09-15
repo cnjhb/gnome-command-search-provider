@@ -1,5 +1,6 @@
 import os
 import subprocess
+import functools
 
 from dbus.mainloop.glib import DBusGMainLoop
 DBusGMainLoop(set_as_default=True)
@@ -39,8 +40,23 @@ class SearchService(dbus.service.Object):
     @dbus.service.method(in_signature='asas', out_signature='as', **sbn)
     def GetSubsearchResultSet(self, previous_results, new_terms):
         search = " ".join(new_terms)
+
+        def useSort(element1,element2):
+            searchLen=len(search)
+            e1Len=len(element1)
+            e2Len=len(element2)
+
+            e1i=0
+            while(e1i<e1Len and e1i<searchLen and element1[e1i]==search[e1i]):
+                e1i+=1
+            e2i=0
+            while(e2i<e2Len and e2i<searchLen and element2[e2i]==search[e2i]):
+                e2i+=1
+            return e2i-e1i
+
         print(search)
         results = [command for command in previous_results if search in command]
+        results.sort(key=functools.cmp_to_key(useSort))
         results = [search] + results
         print(results)
         return results
