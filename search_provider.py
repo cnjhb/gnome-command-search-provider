@@ -61,7 +61,6 @@ class SearchService(dbus.service.Object):
         else:
             results = [command for command in previous_results if search in command]
             results.sort(key=functools.cmp_to_key(useSort))
-            results = [search] + results
 
         return results
                 
