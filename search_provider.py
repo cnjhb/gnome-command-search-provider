@@ -23,7 +23,7 @@ class SearchService(dbus.service.Object):
     @dbus.service.method(in_signature='sasu', **sbn)
     def ActivateResult(self, id, terms, timestamp):
         command = id
-        os.system(command)
+        os.system(f"{command} &")
 
     @dbus.service.method(in_signature='as', out_signature='as', **sbn)
     def GetInitialResultSet(self, terms):
