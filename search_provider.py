@@ -8,13 +8,10 @@ import dbus.service
 
 from gi.repository import GLib
 
-# Shell
-shell = "zsh"
-
 sbn = dict(dbus_interface='org.gnome.Shell.SearchProvider2')
 
 class SearchService(dbus.service.Object):
-    bus_name = "org.gnome.Terminal.CommandSearchProvider"
+    bus_name = "org.gnome.Command.SearchProvider"
     object_path = "/" + bus_name.replace(".", "/")
 
     def __init__(self):
@@ -26,8 +23,7 @@ class SearchService(dbus.service.Object):
     @dbus.service.method(in_signature='sasu', **sbn)
     def ActivateResult(self, id, terms, timestamp):
         command = id
-        print(f"Command: {command}")
-        os.system(f"gnome-terminal -- {shell} -c 'cd ~; {command}; exec {shell}'")
+        os.system(command)
 
     @dbus.service.method(in_signature='as', out_signature='as', **sbn)
     def GetInitialResultSet(self, terms):

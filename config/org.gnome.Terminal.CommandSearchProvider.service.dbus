@@ -1,4 +1,0 @@
-[D-BUS Service]
-Name=org.gnome.Terminal.CommandSearchProvider
-Exec=/usr/lib/terminal_search_provider/search_provider.py
-SystemdService=org.gnome.Terminal.CommandSearchProvider.service

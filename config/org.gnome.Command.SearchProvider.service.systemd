@@ -1,0 +1,7 @@
+[Unit]
+Description=GNOME Shell search provider for commands
+
+[Service]
+Type=dbus
+BusName=org.gnome.Command.SearchProvider
+ExecStart=python3 /usr/lib/command_search_provider/search_provider.py
