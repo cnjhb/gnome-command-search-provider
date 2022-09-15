@@ -19,6 +19,7 @@ class SearchService(dbus.service.Object):
 
     def __init__(self):
         self.session_bus = dbus.SessionBus()
+        self.is_with_argument=False
         bus_name = dbus.service.BusName(self.bus_name, bus=self.session_bus)
         dbus.service.Object.__init__(self, bus_name, self.object_path)
 
@@ -40,7 +41,7 @@ class SearchService(dbus.service.Object):
     @dbus.service.method(in_signature='asas', out_signature='as', **sbn)
     def GetSubsearchResultSet(self, previous_results, new_terms):
         search = " ".join(new_terms)
-
+        results=''
         def useSort(element1,element2):
             searchLen=len(search)
             e1Len=len(element1)
@@ -54,11 +55,14 @@ class SearchService(dbus.service.Object):
                 e2i+=1
             return e2i-e1i
 
-        print(search)
-        results = [command for command in previous_results if search in command]
-        results.sort(key=functools.cmp_to_key(useSort))
-        results = [search] + results
-        print(results)
+        self.is_with_argument=len(search.split(' '))>1
+        if self.is_with_argument:
+            results=[search]
+        else:
+            results = [command for command in previous_results if search in command]
+            results.sort(key=functools.cmp_to_key(useSort))
+            results = [search] + results
+
         return results
                 
     @dbus.service.method(in_signature='asu', terms='as', timestamp='u', **sbn)
